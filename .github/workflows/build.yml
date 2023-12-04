@@ -1,0 +1,38 @@
+name: Install and Test
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+jobs:
+  build-linux:
+    defaults:
+      run:
+        # Ensures environment gets sourced right
+        shell: bash -l {0}
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # setup conda-forge with micromamba
+    - name: Setup Python
+      uses: mamba-org/setup-micromamba@v1
+      with:
+        environment-file: environment.yml
+        condarc: |
+          channels:
+            - conda-forge
+            - defaults
+        create-args: >-
+          python=3.12
+        environment-name: prod
+        cache-environment: true
+
+    - name: Do Work
+      run: |
+        set -e
+        python -c "import psycopg"
