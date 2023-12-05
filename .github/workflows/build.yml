@@ -51,9 +51,9 @@ jobs:
         ldd /home/runner/micromamba/envs/prod/bin/psql
         /home/runner/micromamba/envs/prod/bin/psql -l 'postgresql://runner:runner@localhost/postgres?gssencmode=disable'
 
-    - name: Setup tmate session
-      if: failure()
-      uses: mxschmitt/action-tmate@v3
+    #- name: Setup tmate session
+    #  if: failure()
+    #  uses: mxschmitt/action-tmate@v3
 
     - uses: actions/upload-artifact@v3
       if: ${{ failure() }}  # Run only if something went wrong
