@@ -35,4 +35,5 @@ jobs:
     - name: Do Work
       run: |
         set -e
+        sudo systemctl start postgresql.service
         python -c "import psycopg; psycopg.connect('dbname=postgres')"
