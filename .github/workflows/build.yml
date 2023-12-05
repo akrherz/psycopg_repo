@@ -38,4 +38,4 @@ jobs:
         sudo systemctl start postgresql.service
         sudo systemctl status postgresql.service -l
         sudo -u postgres psql -c "create role runner with login password 'runner';"
-        python -c "import psycopg; psycopg.connect('postgresql://runner:runner@localhost:5432/postgres'); print('working')"
+        python -c "import psycopg; cursor = psycopg.connect('postgresql://runner:runner@localhost:5432/postgres?gssencmode=disable').cursor(); cursor.execute('select 1'); print(cursor.fetchall())"
