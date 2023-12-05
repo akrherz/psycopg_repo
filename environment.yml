@@ -1,2 +1,3 @@
 dependencies:
   - psycopg
+  - openssl <3.2
