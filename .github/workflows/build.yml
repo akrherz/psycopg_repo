@@ -38,5 +38,6 @@ jobs:
         sudo systemctl start postgresql.service
         sudo systemctl status postgresql.service -l
         sudo -u postgres psql -c "create role runner with login password 'runner';"
+        which psql
         ldd /home/runner/micromamba/envs/prod/bin/psql
         /home/runner/micromamba/envs/prod/bin/psql -l 'postgresql://runner:runner@localhost/postgres?gssencmode=disable'
