@@ -35,6 +35,7 @@ jobs:
     - name: Do Work
       run: |
         set -e
+        which psql
         sudo systemctl start postgresql.service
         sudo systemctl status postgresql.service -l
         sudo -u postgres psql -c "create role runner with login password 'runner';"
