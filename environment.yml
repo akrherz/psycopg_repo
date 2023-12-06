@@ -1,2 +1,2 @@
 dependencies:
-  - postgresql==16
+  - postgresql==16.1
