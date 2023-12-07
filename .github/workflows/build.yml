@@ -32,10 +32,32 @@ jobs:
         environment-name: prod
         cache-environment: true
 
+    - name: Set cores to get stored in /cores
+      run: |
+        sudo mkdir /cores
+        sudo chmod 777 /cores
+        # Core filenames will be of the form executable.pid.timestamp:
+        sudo bash -c 'echo "/cores/%e.%p.%t" > /proc/sys/kernel/core_pattern'
+
     - name: Do Work
       run: |
         set -e
+        # Allow core dumps
+        ulimit -c unlimited
         sudo systemctl start postgresql.service
         sudo systemctl status postgresql.service -l
         sudo -u postgres psql -c "create role runner with login password 'runner';"
-        python -c "import psycopg; cursor = psycopg.connect('postgresql://runner:runner@localhost:5432/postgres?gssencmode=disable').cursor(); cursor.execute('select 1'); print(cursor.fetchall())"
+        which psql
+        ldd /home/runner/micromamba/envs/prod/bin/psql
+        /home/runner/micromamba/envs/prod/bin/psql -l 'postgresql://runner:runner@localhost/postgres?gssencmode=disable'
+
+    #- name: Setup tmate session
+    #  if: failure()
+    #  uses: mxschmitt/action-tmate@v3
+
+    - uses: actions/upload-artifact@v3
+      if: ${{ failure() }}  # Run only if something went wrong
+      with:
+        name: cores
+        path: /cores
+
