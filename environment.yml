@@ -1,2 +1,4 @@
 dependencies:
-  - postgresql==16.1
+  - openssl >=3.2
+  - postgresql=16.1
+
